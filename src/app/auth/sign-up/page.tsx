@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { signUp } from '@/app/utils/Auth'
 
-export default function page() {
+export default function SignupPage() {
   const [form, setForm] = useState({
     name: '',
     email: '',

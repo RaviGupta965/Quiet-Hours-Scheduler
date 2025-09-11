@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabaseClient } from './lib/supabase_client'
 
-export default function page() {
+export default function Dashboard() {
   const [session, setSession] = useState<any>(null)
 
   useEffect(() => {
