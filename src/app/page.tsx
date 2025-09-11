@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { supabaseClient } from './lib/supabase_client'
-
+import type { Session } from '@supabase/supabase-js'
 export default function Dashboard() {
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
     const getSession = async () => {
