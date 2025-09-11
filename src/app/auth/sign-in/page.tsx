@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { signIn } from '@/app/utils/Auth'
 import { useRouter } from 'next/navigation'
 import { supabaseClient } from '@/app/lib/supabase_client'
-export default function SignupPage() {
+export default function page() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
