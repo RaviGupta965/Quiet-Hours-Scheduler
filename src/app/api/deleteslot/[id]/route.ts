@@ -1,20 +1,21 @@
 import { connectDB } from "@/app/lib/connectDB";
 import { NextRequest, NextResponse } from "next/server";
 import Slot from "@/app/model/slotSchema";
+import { Types } from "mongoose";
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: Record<string, string> }
+  context: { params: { id: string } }
 ) {
   try {
     await connectDB();
 
     const id = context.params.id;
-    if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    if (!id || !Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    const slot = await Slot.findByIdAndDelete(id);
+    const slot = await Slot.findByIdAndDelete(new Types.ObjectId(id));
 
     return NextResponse.json(
       { message: "Slot deleted successfully", slot },
