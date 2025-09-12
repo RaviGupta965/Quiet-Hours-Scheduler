@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { signUp } from '@/app/utils/Auth'
-
+import { useRouter } from 'next/navigation'
 export default function SignupPage() {
+  const router = useRouter();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -11,7 +12,6 @@ export default function SignupPage() {
     confirmPassword: '',
   })
   const [loading, setLoading] = useState(false)
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -30,11 +30,14 @@ export default function SignupPage() {
     }
 
     setLoading(true)
-    const { error } = await signUp(email, password) // you can also store `name` in metadata
+    const { error } = await signUp(email, password,name) // you can also store `name` in metadata
     setLoading(false)
 
     if (error) alert(error.message)
-    else alert('Signup successful! Please check your email for confirmation.')
+    else{
+      router.push('/');
+      alert('Signup successful! Please check your email for confirmation.')
+    }
   }
 
   return (
