@@ -83,7 +83,7 @@ export default function Dashboard() {
         method: 'DELETE'
       })
       const data = await res.json()
-      // console.log("Slot Deleted :", data.slots)
+      console.log("Slot Deleted :", data.slots)
     } catch (err) {
       console.error("Fetch error:", err)
     }
