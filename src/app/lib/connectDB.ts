@@ -1,12 +1,10 @@
 import mongoose from "mongoose"
 
-declare global {
-  // For hot-reloading in Next.js dev
-  var mongooseConnection: mongoose.Connection | undefined
-}
+let isConnected = false
+let mongooseConnection: mongoose.Connection
 
 export const connectDB = async (): Promise<mongoose.Connection> => {
-  if (mongooseConnection) return mongooseConnection
+  if (isConnected && mongooseConnection) return mongooseConnection
 
   if (!process.env.MONGODB_URI) {
     throw new Error("MONGODB_URI is not defined in environment variables")
@@ -17,8 +15,11 @@ export const connectDB = async (): Promise<mongoose.Connection> => {
       dbName: "silentstudy",
       autoIndex: true,
     })
-    console.log("MONGODB CONNNECTED SUCCESSFULLY")
+
+    isConnected = true
     mongooseConnection = mongoose.connection
+    console.log("MONGODB :: CONNECTED SUCCESSFULLY")
+
     return mongooseConnection
   } catch (error) {
     console.error("MONGODB :: CONNECTION ERROR", error)
