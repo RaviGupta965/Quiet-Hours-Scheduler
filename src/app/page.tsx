@@ -13,6 +13,16 @@ interface Slot {
   reminderSent: boolean
 }
 
+interface SlotResponse {
+  _id: string
+  title: string
+  startTime: string
+  endTime: string
+  email: string
+  reminderSent: boolean
+}
+
+
 export default function Dashboard() {
   const [session, setSession] = useState<Session | null>(null)
   const [crons, setCrons] = useState<Slot[]>([])
@@ -34,7 +44,7 @@ export default function Dashboard() {
           const res = await fetch(`/api/getslot/${session.user.email}`)
           const data = await res.json()
           // Convert startTime and endTime to Date objects
-          const slots: Slot[] = data.slots.map((slot: any) => ({
+          const slots: Slot[] = data.slots.map((slot: SlotResponse) => ({
             ...slot,
             startTime: new Date(slot.startTime),
             endTime: new Date(slot.endTime),
