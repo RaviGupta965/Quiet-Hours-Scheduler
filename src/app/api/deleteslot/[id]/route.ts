@@ -10,12 +10,13 @@ export async function DELETE(
     await connectDB();
     const { id } = await params;
 
-    const slot= await Slot.findByIdAndDelete(id);
+    const slot = await Slot.findByIdAndDelete(id);
     return NextResponse.json(
-      { message: "Slots fdeleted successfully", slot },
+      { message: "Slots deleted successfully", slot },
       { status: 200 }
     );
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
