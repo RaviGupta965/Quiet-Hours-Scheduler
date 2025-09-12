@@ -4,9 +4,21 @@ import { useEffect, useState } from 'react'
 import { supabaseClient } from './lib/supabase_client'
 import type { Session } from '@supabase/supabase-js'
 
+
+interface Slot {
+  _id: string
+  title: string
+  startTime: Date
+  endTime: string | Date
+  email: string
+  reminderSent: boolean
+}
+
+
+
 export default function Dashboard() {
   const [session, setSession] = useState<Session | null>(null)
-  const [crons, setCrons] = useState<any[]>([])
+  const [crons, setCrons] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
 
@@ -195,7 +207,7 @@ export default function Dashboard() {
                 {/* Date */}
                 <p className="text-gray-700 flex items-center mb-2">
                   <span className="mr-2">📅</span>
-                  <span className="font-medium">{cron.startTime.split("T")[0]}</span>
+                  <span className="font-medium">{cron.startTime.toLocaleDateString().split('T')[0]}</span>
                 </p>
 
                 {/* Time */}
