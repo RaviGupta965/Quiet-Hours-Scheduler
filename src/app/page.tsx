@@ -9,7 +9,7 @@ interface Slot {
   _id: string
   title: string
   startTime: Date
-  endTime: string | Date
+  endTime: Date
   email: string
   reminderSent: boolean
 }
@@ -213,12 +213,12 @@ export default function Dashboard() {
                 {/* Time */}
                 <p className="text-gray-700 flex items-center mb-4">
                   <span className="mr-2">⏰</span>
-                  {new Date(cron.startTime).toLocaleTimeString([], {
+                  {cron.startTime.toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}{" "}
                   –{" "}
-                  {new Date(cron.endTime).toLocaleTimeString([], {
+                  {cron.endTime.toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}

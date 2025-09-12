@@ -8,7 +8,7 @@ export async function DELETE(
 ) {
   try {
     await connectDB();
-    const { id } = await params;
+    const { id } = params;
 
     const slot = await Slot.findByIdAndDelete(id);
     return NextResponse.json(
