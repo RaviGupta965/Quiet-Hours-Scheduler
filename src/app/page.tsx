@@ -41,7 +41,9 @@ export default function Dashboard() {
 
       if (session?.user?.email) {
         try {
-          const res = await fetch(`/api/getslot/${session.user.email}`)
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getslot/${session.user.email}`, {
+            cache: "no-store"
+          })
           const data = await res.json()
           // Convert startTime and endTime to Date objects
           const slots: Slot[] = data.slots.map((slot: SlotResponse) => ({
@@ -79,7 +81,7 @@ export default function Dashboard() {
       return
     }
 
-    const res = await fetch('/api/addslot', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/addslot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -106,7 +108,7 @@ export default function Dashboard() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/deleteslot/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteslot/${id}`, {
         method: 'DELETE'
       })
       const data = await res.json()
