@@ -25,7 +25,7 @@ interface SlotResponse {
 
 
 export default function Dashboard() {
-
+  const [submiting,setsubmiting] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null)
   const [crons, setCrons] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
@@ -76,7 +76,7 @@ export default function Dashboard() {
       alert('Please fill in all fields.')
       return
     }
-
+    setsubmiting(true);
     const start = new Date(`${date}T${startTime}`)
     const end = new Date(`${date}T${endTime}`)
 
@@ -106,6 +106,7 @@ export default function Dashboard() {
       startTime: new Date(data.slot.startTime),
       endTime: new Date(data.slot.endTime),
     }
+    setsubmiting(true);
     setCrons(prev => [...prev, newSlot])
     setAdding(false)
     setTitle('')
@@ -113,8 +114,11 @@ export default function Dashboard() {
     setStartTime('')
     setEndTime('')
   }
-
-
+  const handleLogout = async () => {
+    await supabaseClient.auth.signOut();
+    setSession(null);
+    setCrons([]);
+  };
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteslot/${id}`, {
@@ -145,7 +149,7 @@ export default function Dashboard() {
         <p className="text-gray-600 mb-6">
           Please log in to view your dashboard.
         </p>
-        <button onClick={()=>router.push('auth/sign-in')} className="px-6 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
+        <button onClick={() => router.push('auth/sign-in')} className="px-6 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
           Go to Login
         </button>
       </div>
@@ -155,17 +159,26 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 p-8">
       <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl p-8 border border-gray-100">
+
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
             Welcome, <span className="text-indigo-600">{session.user.user_metadata?.name || session.user.email}</span>
           </h1>
-          <button
-            onClick={() => setAdding(!adding)}
-            className="px-5 py-2 bg-indigo-600 text-white font-medium rounded-xl shadow hover:bg-indigo-700 transition"
-          >
-            {adding ? 'Cancel' : '+ Add Study Slot'}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setAdding(!adding)}
+              className="px-5 py-2 bg-indigo-600 text-white font-medium rounded-xl shadow hover:bg-indigo-700 transition"
+            >
+              {adding ? 'Cancel' : '+ Add Study Slot'}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-5 py-2 bg-red-500 text-white font-medium rounded-xl shadow hover:bg-red-600 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Add Slot Form */}
@@ -180,7 +193,7 @@ export default function Dashboard() {
               <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} className="p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500" />
               <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} className="p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500" />
             </div>
-            <button onClick={handleAddSlot} className="mt-6 w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow hover:bg-green-700 transition">
+            <button disabled={submiting} onClick={handleAddSlot} className="mt-6 w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow hover:bg-green-700 transition">
               Save Slot
             </button>
           </div>
