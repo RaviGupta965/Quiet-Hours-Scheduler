@@ -75,7 +75,7 @@ export default function SigninPage() {
                             disabled={loading}
                             className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition disabled:opacity-50"
                         >
-                            {loading ? 'Creating Account...' : 'Sign Up'}
+                            {loading ? 'Signing in...' : 'Sign In'}
                         </button>
                     </div>
 
