@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabaseClient } from './lib/supabase_client'
 import type { Session } from '@supabase/supabase-js'
+import { useRouter } from 'next/navigation'
 
 interface Slot {
   _id: string
@@ -24,11 +25,12 @@ interface SlotResponse {
 
 
 export default function Dashboard() {
+
   const [session, setSession] = useState<Session | null>(null)
   const [crons, setCrons] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
   const [adding, setAdding] = useState(false)
-
+  const router = useRouter();
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
   const [startTime, setStartTime] = useState('')
@@ -112,6 +114,7 @@ export default function Dashboard() {
     setEndTime('')
   }
 
+
   const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteslot/${id}`, {
@@ -142,7 +145,7 @@ export default function Dashboard() {
         <p className="text-gray-600 mb-6">
           Please log in to view your dashboard.
         </p>
-        <button className="px-6 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
+        <button onClick={()=>router.push('auth/sign-in')} className="px-6 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition">
           Go to Login
         </button>
       </div>
