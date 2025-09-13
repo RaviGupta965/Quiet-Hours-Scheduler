@@ -3,17 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 import Slot from "@/app/model/slotSchema";
 import { Types } from "mongoose";
 
-export async function DELETE(
-  req: NextRequest,
-  context: any
-) {
+export async function DELETE(req: NextRequest) {
   try {
     await connectDB();
-    const {id} = context.params;
+    const url = req.nextUrl;
+
+    // Example: /api/deleteslot/123
+    const id = url.pathname.split("deleteslot/")[1];
     console.log(id);
-    if (!id || !Types.ObjectId.isValid(id)) {
-      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-    }
 
     const slot = await Slot.findByIdAndDelete(new Types.ObjectId(id));
 
