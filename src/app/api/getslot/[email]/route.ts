@@ -4,11 +4,13 @@ import Slot from "@/app/model/slotSchema";
 // POST request handler
 export async function GET(
   req: NextRequest,
-  { params }: { params: { email: string } }
 ) {
   try {
     await connectDB();
-    const { email } = await params;
+    const url = req.nextUrl;
+
+    // Example: /api/deleteslot/123
+    const email = url.pathname.split("getslot/")[1];
 
     const slots = await Slot.find({ email }).sort({ startTime: 1 });
 
