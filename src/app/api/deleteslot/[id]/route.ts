@@ -5,12 +5,12 @@ import { Types } from "mongoose";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     await connectDB();
-
-    const {id} = params;
+    const {id} = context.params;
+    console.log(id);
     if (!id || !Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
