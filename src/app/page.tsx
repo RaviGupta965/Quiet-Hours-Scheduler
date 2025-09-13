@@ -122,7 +122,7 @@ export default function Dashboard() {
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100">
       <p className="text-indigo-700 text-xl font-medium animate-pulse">
-        Loading your dashboard...
+        Loading your dashboard....
       </p>
     </div>
   )
