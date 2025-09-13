@@ -34,6 +34,7 @@ export async function GET() {
       startTime: { $gte: start, $lt: end }
     })
 
+
     for (const slot of slots) {
       await transporter.sendMail({
         from: process.env.MAIL_USER,
@@ -41,6 +42,9 @@ export async function GET() {
         subject: `Reminder: "${slot.title}" starts soon`,
         text: `Hello, your study slot "${slot.title}" starts at ${slot.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
       })
+      await Slot.updateOne({_id : slot._id},{
+        reminderSent : true
+      });
     }
 
     return NextResponse.json({ success: true, count: slots.length })
