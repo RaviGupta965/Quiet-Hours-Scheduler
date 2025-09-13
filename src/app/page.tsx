@@ -36,27 +36,33 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession()
-      setSession(session)
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession()
+        console.log("Fetched session:", session)
+        setSession(session)
 
-      if (session?.user?.email) {
-        try {
+        if (session?.user?.email) {
           const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getslot/${session.user.email}`, {
             cache: "no-store"
           })
+
+          if (!res.ok) {
+            console.error("API Error:", await res.text())
+            return
+          }
+
           const data = await res.json()
-          // Convert startTime and endTime to Date objects
           const slots: Slot[] = data.slots.map((slot: SlotResponse) => ({
             ...slot,
             startTime: new Date(slot.startTime),
             endTime: new Date(slot.endTime),
           }))
           setCrons(slots)
-        } catch (err) {
-          console.error("Fetch error:", err)
-        } finally {
-          setLoading(false)
         }
+      } catch (err) {
+        console.error("Fetch error:", err)
+      } finally {
+        setLoading(false)
       }
     }
 
